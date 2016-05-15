@@ -14,6 +14,7 @@ if(!JWT_SECRET) {
 }
 
 var auctionSchema = new mongoose.Schema({
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'Users' },
   title: { type: String, required: true },
   description: { type: String, required: true },
   imgUrl: { type: String, required: true },
@@ -29,6 +30,7 @@ auctionSchema.statics.createNew = (auctionObj, userId, cb) => {
   if(!auctionObj) res.send('Not proper auction format!');
 
   var auction = new Auction({
+    createdBy: userId,
     title: auctionObj.title,
     description: auctionObj.description,
     imgUrl: auctionObj.imgUrl,
@@ -53,7 +55,7 @@ auctionSchema.statics.createNew = (auctionObj, userId, cb) => {
 auctionSchema.statics.editOne = (userId, auctionId, editedAuction, cb) => {
   Auction.findById(auctionId, (err, oldAuction) => {
     if(err) cb(err);
-    if(oldAuction.bids[0].madeBy.toString() !== userId.toString()) return cb({err: 'You aren\'t the creator of this auction. Not authorized to edit.'})
+    if(oldAuction && oldAuction.bids[0].madeBy.toString() !== userId.toString()) return cb({err: 'You aren\'t the creator of this auction. Not authorized to edit.'})
     var auction = {
       title: editedAuction.title,
       description: editedAuction.description,

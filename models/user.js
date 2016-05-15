@@ -93,6 +93,13 @@ userSchema.methods.addAuction = function(auctionObj, cb) {
   this.save(cb);
 };
 
+userSchema.methods.removeAuction = function(auctionId, cb) {
+  var index = this.auctions.indexOf(auctionId.toString());
+  console.log('index:', index);
+  this.auctions.splice(index, 1);
+  this.save(cb);
+};
+
 var User = mongoose.model('User', userSchema);
 
 module.exports = User;
