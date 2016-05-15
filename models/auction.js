@@ -39,7 +39,15 @@ auctionSchema.statics.createNew = (auctionObj, userId, cb) => {
       date: moment()
     }]
   });
-  auction.save(cb);
+  console.log('cb1:',cb);
+  auction.save((err1, auction) => {
+    console.log('cb2:',cb);
+    User.findById(userId, (err2, user) => {
+      console.log('cb3:',cb);
+      user.addAuction(auction.id);
+      cb(err1 || err2);
+    })
+  });
 }
 
 auctionSchema.statics.editOne = (userId, auctionId, editedAuction, cb) => {
@@ -87,5 +95,6 @@ auctionSchema.methods.removeBid = function (bidId, userId, cb) {
 
 
 var Auction = mongoose.model('Auction', auctionSchema);
+var User = require('../models/user');
 
 module.exports = Auction;

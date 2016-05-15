@@ -88,6 +88,11 @@ userSchema.methods.makeToken = function() {
   return token;
 };
 
+userSchema.methods.addAuction = function(auctionObj, cb) {
+  this.auctions.push(auctionObj);
+  this.save(cb);
+};
+
 var User = mongoose.model('User', userSchema);
 
 module.exports = User;
