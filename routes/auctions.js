@@ -14,15 +14,18 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', User.isLoggedIn, (req, res) => {
-  Auction.createNew(req.body, req.user._id, (err, auction) => {
-    res.status(err ? 400 : 200).send(err || auction);
-  });
+  User.findById(req.user._id, (err, user) => {
+    if(err) return res.status(400).send({err: err});
+    Auction.createNew(req.body, user, (err, auction) => {
+      res.status(err ? 400 : 200).send(err || auction);
+    });
+  })
 });
 
 router.get('/:id', User.isLoggedIn, (req, res) => {
   Auction.findById(req.params.id, (err, auction) => {
     res.status(err ? 400 : 200).send(err || auction);
-  });
+  }).populate('createdBy');
 });
 
 router.put('/:id', User.isLoggedIn, (req, res) => {
@@ -34,9 +37,9 @@ router.put('/:id', User.isLoggedIn, (req, res) => {
 
 router.delete('/:id', User.isLoggedIn, (req, res) => {
   User.findById(req.user._id, (err1, user) => {
-    if(err1) return res.status(400).send({err: err});
+    if(err1) return res.status(400).send({err: err1});
     user.removeAuction(req.params.id, (err2) => {
-      if(err2) return res.status(400).send({err: err});
+      if(err2) return res.status(400).send({err: err2});
       Auction.findById(req.params.id, (err, auction) => {
         if(auction && auction.bids[0].madeBy.toString() !== req.user._id.toString()) return res.status(400).send('You aren\'t the creator of this auction. Not authorized to delete.');
         Auction.findByIdAndRemove(req.params.id, (err) => {
@@ -48,6 +51,7 @@ router.delete('/:id', User.isLoggedIn, (req, res) => {
 });
 
 router.post('/:id/addBid', User.isLoggedIn, (req, res) => {
+  console.log("req.params.id", req.params.id);
   Auction.findById(req.params.id, (err, auction) => {
     if(auction && auction.bids[0].madeBy.toString() === req.user._id.toString()) return res.status(400).send('You can\'t place a bid on your own item.');
     if(err) return res.status(400).send(err);

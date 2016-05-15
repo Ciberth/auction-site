@@ -1,0 +1,55 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-xs-offset-3 text-center">
+      <div class="panel panel-default loginPanel">
+        <div class="panel-header">
+          <h4 class="loginPanelHeader" ng-if="!success">New auction</h4>
+          <h4 class="loginPanelHeader" ng-if="success">Redirection...</h4>
+        </div>
+        <div class="panel-body regPanel">
+          <div class="row">
+            <div class="col-xs-12 regLoader"  ng-if="success">
+                <span style="position:relative; top: 80px; color:#1DBB9B">Successful registration!</span>
+                <span us-spinner="{radius:20, width:8, length: 16}"></span>
+            </div>
+          </div>
+          <form class="form-horizontal" role="form" ng-submit="startAuction()" ng-if="!success">
+            <div class="form-group">
+              <label class="control-label col-sm-4">Title:</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" placeholder="Enter title" ng-model="newAuction.title" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="pwd">Description:</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" placeholder="Enter Description" ng-model="newAuction.description" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="pwd">End Time:</label>
+              <div class="col-sm-8">
+                <input type="date" class="form-control" placeholder="Enter ending date" ng-model="newAuction.endTime" min="{{currentDate | date:'yyyy-MM-dd'}}" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-4" for="pwd">Image Url:</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" placeholder="Enter image url" ng-model="newAuction.imgUrl">
+              </div>
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon">$</span>
+              <input class="form-control" type="number" placeholder="Enter starting price" min="1" ng-model="newAuction.initialPrice" required>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10 text-right">
+                <button type="submit" class="btn btn-default logInButton newAuction">Start auction</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

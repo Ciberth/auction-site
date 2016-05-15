@@ -102,5 +102,4 @@ userSchema.methods.removeAuction = function(auctionId, cb) {
 };
 
 var User = mongoose.model('User', userSchema);
-
 module.exports = User;

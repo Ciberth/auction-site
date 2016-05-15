@@ -13,51 +13,48 @@ if(!JWT_SECRET) {
   throw new Error('Missing JWT_SECRET');
 }
 
+var User = require('../models/user');
+
 var auctionSchema = new mongoose.Schema({
-  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'Users' },
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   title: { type: String, required: true },
   description: { type: String, required: true },
   imgUrl: { type: String, required: true },
   endTime: { type: String, required: true },
   isFinished: { type: Boolean, default: false, required: true },
   bids: [{
-    madeBy: { type: mongoose.Schema.Types.ObjectId, ref: 'Users' },
+    madeBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     value: { type: Number, required: true },
     date: { type: String, required: true }
   }]
 });
 
-auctionSchema.statics.createNew = (auctionObj, userId, cb) => {
+auctionSchema.statics.createNew = (auctionObj, user, cb) => {
   if(!auctionObj) res.send('Not proper auction format!');
 
   var auction = new Auction({
-    createdBy: userId,
+    createdBy: user._id,
     title: auctionObj.title,
     description: auctionObj.description,
     imgUrl: auctionObj.imgUrl,
     endTime: auctionObj.endTime,
     bids: [{
-      madeBy: userId,
+      madeBy: user._id,
       value: auctionObj.initialPrice,
       date: moment()
     }]
   });
-  console.log('cb1:',cb);
-  auction.save((err1, auction) => {
-    console.log('cb2:',cb);
-    User.findById(userId, (err2, user) => {
-      console.log('cb3:',cb);
-      user.addAuction(auction.id);
-      cb(err1 || err2);
-    })
+  console.log('auction', auction);
+  auction.save((err, dbAuction) => {
+    console.log('dbAuction', dbAuction);
+    console.log('err', err);
+    user.addAuction(dbAuction._id, cb(err));
   });
 }
 
 auctionSchema.statics.editOne = (userId, auctionId, editedAuction, cb) => {
   Auction.findById(auctionId, (err, oldAuction) => {
     if(err) cb(err);
-    console.log("oldAuction.createdBy",oldAuction.createdBy);
-    console.log("userId",userId);
     if(oldAuction && oldAuction.createdBy.toString() !== userId.toString()) return cb({err: 'You aren\'t the creator of this auction. Not authorized to edit.'})
     var auction = {
       title: editedAuction.title,
@@ -98,8 +95,6 @@ auctionSchema.methods.removeBid = function (bidId, userId, cb) {
   this.save(cb);
 }
 
-
 var Auction = mongoose.model('Auction', auctionSchema);
-var User = require('../models/user');
 
 module.exports = Auction;

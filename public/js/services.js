@@ -36,6 +36,21 @@ app.service('User', function($http, $sessionStorage, $q) {
 
 })
 
+app.service('Auction', function($http, $sessionStorage, $q) {
+  this.getAll = () => {
+    return $http.get('./api/auctions');
+  }
+  this.getOne = (id) => {
+    return $http.get(`./api/auctions/${id}`);
+  }
+  this.addBid = (id, value) => {
+    return $http.post(`./api/auctions/${id}/addBid/`, {"value": value});
+  }
+  this.createOne = (auctionObj) => {
+    return $http.post('./api/auctions', auctionObj);
+  }
+})
+
 app.service('StoreData', function() {
   var storeData = {};
   this.get = () => { return storeData }

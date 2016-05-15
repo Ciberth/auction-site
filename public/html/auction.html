@@ -1,0 +1,57 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <h2>{{auction.title}}</h2>
+    </div>
+    <div class="col-xs-12">
+      <div class="well">
+        <div class="row profileItem1">
+          <b>Description:</b> {{ auction.description }}
+        </div>
+        <div class="row profileItem1">
+          <b>Lastest Bid:</b> <span style="color:green"><b>{{auction.bids[auction.bids.length - 1].value | currency}}</b></span>
+        </div>
+        <div class="row profileItem1" ng-if="!isMyAuction">
+          <div class="row">
+            <div class="col-sm-6">
+              <form ng-submit="addBid()">
+                <div class="input-group">
+                  <span class="input-group-addon">$</span>
+                  <input ng-model="newBid.value" class="form-control" type="number" placeholder="Enter amount to bid" min="{{auction.bids[auction.bids.length - 1].value + 1}}" required>
+                  <span class="input-group-btn">
+                    <button class="btn btn-success">Add bid</button>
+                  </span>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="row profileItem">
+          <b>Created By:</b> {{ auction.createdBy.email }}
+        </div>
+        <div class="row profileItem">
+          <b>Ending in: <span style="color:red">{{ auction.endTime - currentDate | date:'H:mm:ss' }}</span></b>
+        </div>
+        <div class="row profileItem" ng-if="auction.isFinished">
+          <b>Status:</b> ENDED
+        </div>
+        <div class="row profileItem" ng-if="!auction.isFinished">
+          <b>Status:</b> OPEN
+        </div>
+        <div class="row profileItem" ng-if="!auction.isFinished">
+            <b>Images:</b>
+          <div class="row">
+            <img ng-src="{{auction.imgUrl}}" alt="" class="auctionImg">
+          </div>
+        </div>
+        <div class="row profileItem" ng-if="!auction.isFinished">
+            <b>Bids:</b>
+          <div class="row" ng-repeat="bid in auction.bids track by $index">
+            <span style="margin-left:15px" ng-if="$index === 0">Opening Price: <span style="color:green">{{bid.value | currency}}</span> - {{ bid.date | date : medium}}</span>
+            <span style="margin-left:15px" ng-if="$index !== 0">Bid: <span style="color:green">{{ bid.value | currency }}</span> - {{bid.date}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

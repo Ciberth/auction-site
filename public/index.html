@@ -15,6 +15,7 @@
   <script src="/bower_components/spin.js/spin.js"></script>
   <script src="/bower_components/angular-spinner/angular-spinner.js"></script>
   <script src="/bower_components/ngstorage/ngStorage.js"></script>
+  <script src="/bower_components/angular-route/angular-route.js"></script>
 
   <script src="/js/module.js"></script>
   <script src="/js/controllers.js"></script>
@@ -28,12 +29,12 @@
           <div class="row">
             <div class="col-xs-6">
               <a ui-sref="home" class="topBarLogo">AUCTIONS</a>
-              <a class="topBarLink">Auctions</a>
-              <a class="topBarLink">My Profile</a>
+              <a class="topBarLink" ng-if="isLoggedIn" ui-sref="auctions">Auctions</a>
+              <a ui-sref="profile" class="topBarLink" ng-if="isLoggedIn">My Profile</a>
             </div>
             <div class="col-xs-6 text-right">
               <a ng-if="!isLoggedIn" class="topBarButton logIn" ui-sref="login">LOG IN</a>
-              <a ng-if="!isLoggedIn" class="topBarButton register">REGISTER</a>
+              <a ng-if="!isLoggedIn" class="topBarButton register" ui-sref="registration">REGISTER</a>
               <a ng-if="isLoggedIn" class="topBarButton logIn" ng-click="logOut()">Log Out</a>
             </div>
           </div>

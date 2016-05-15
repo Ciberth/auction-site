@@ -17,6 +17,7 @@ mongoose.connect(MONGOURL, err => {
   console.log(err || `MongoDB connected to ${MONGOURL}`);
 });
 
+var User = require('./models/user');
 var app = express();
 
 app.use(logger('dev'));

@@ -117,8 +117,8 @@ body {
 }
 
 .auctionImg {
-  max-width:200px;
-  max-height: 150px;
+  min-width:200px;
+  min-height: 150px;
 }
 
 .auctionPanelContent {
@@ -133,4 +133,31 @@ body {
 
 .openDetails {
   margin-top: 15px;
+}
+
+.regPanel {
+  min-height: 200px;
+}
+
+.regLoader {
+  margin-top: 50px;
+}
+
+.auctionImg {
+  margin-left: 15px;
+  margin-top: 10px;
+}
+
+.addBid {
+  margin-left: 10px;
+}
+
+.addNewAuction {
+  background-color:#1DBB9B;
+  border: none;
+  margin-bottom: 10px;
+}
+
+.newAuction {
+  margin-top: 10px;
 }

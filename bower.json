@@ -22,6 +22,7 @@
     "angular-ui-router": "^0.2.18",
     "font-awesome": "^4.6.3",
     "angular-spinner": "^0.8.1",
-    "ngstorage": "^0.3.10"
+    "ngstorage": "^0.3.10",
+    "angular-route": "^1.5.5"
   }
 }
