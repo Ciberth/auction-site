@@ -56,7 +56,9 @@ auctionSchema.statics.createNew = (auctionObj, userId, cb) => {
 auctionSchema.statics.editOne = (userId, auctionId, editedAuction, cb) => {
   Auction.findById(auctionId, (err, oldAuction) => {
     if(err) cb(err);
-    if(oldAuction && oldAuction.bids[0].madeBy.toString() !== userId.toString()) return cb({err: 'You aren\'t the creator of this auction. Not authorized to edit.'})
+    console.log("oldAuction.createdBy",oldAuction.createdBy);
+    console.log("userId",userId);
+    if(oldAuction && oldAuction.createdBy.toString() !== userId.toString()) return cb({err: 'You aren\'t the creator of this auction. Not authorized to edit.'})
     var auction = {
       title: editedAuction.title,
       description: editedAuction.description,

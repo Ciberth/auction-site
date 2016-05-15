@@ -26,6 +26,7 @@ router.get('/:id', User.isLoggedIn, (req, res) => {
 });
 
 router.put('/:id', User.isLoggedIn, (req, res) => {
+  console.log('req.user._id',req.user);
   Auction.editOne(req.user._id, req.params.id, req.body, (err, editedAuction) => {
     res.status(err ? 400 : 200).send(err || editedAuction);
   });

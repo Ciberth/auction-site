@@ -5,6 +5,7 @@ var router = express.Router();
 
 
 var User = require('../models/user');
+var Auction = require('../models/auction');
 
 router.get('/', (req, res) => {
   User.find({}, (err, users) => {
@@ -21,10 +22,10 @@ router.post('/register', (req, res) => {
 
 //   /api/users/login
 router.post('/login', (req, res) => {
-  User.authenticate(req.body, (err, token) => {
+  User.authenticate(req.body, (err, token, currentUserId) => {
     if(err) return res.status(400).send(err);
 
-    res.cookie('accessToken', token).send(token);
+    res.cookie('accessToken', token).send(currentUserId);
   });
 });
 
@@ -35,7 +36,10 @@ router.delete('/logout', (req, res) => {
 
 // /api/users/profile
 router.get('/profile', User.isLoggedIn, (req, res) => {
-  res.send(req.user);
+  User.findById(req.user._id, (err, user) => {
+    if(err) return res.status(400).send(err);
+    res.send(req.user);
+  });
 })
 
 // /api/users/profile

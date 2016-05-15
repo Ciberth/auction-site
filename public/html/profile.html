@@ -1,0 +1,47 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <h2>My Profile</h2>
+    </div>
+    <div class="col-xs-12">
+      <div class="well">
+        <div class="row profileItem1">
+          <b>E-mail:</b> {{ profile.email }}
+        </div>
+        <div class="row profileItem">
+          <b>Password:</b> 🔒 - <a>Change password</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12">
+      <h3>My Auctions:</h3>
+    </div>
+    <div class="col-xs-12">
+      <div class="row">
+        <div class="col-xs-3" ng-repeat="auction in profile.auctions">
+          <div class="panel panel-default">
+            <div class="panel-heading">{{ auction.title }}</div>
+            <div class="panel-body">
+              <div class="row text-center">
+                <img ng-src="{{ auction.imgUrl }}" class="auctionImg">
+              </div>
+              <div class="row auctionPanelContent">
+                <div class="col-xs-12">
+                  Remaning Time:<br>
+                  <span style="color:#EE585D">00h:00m:59s</span>
+                </div>
+                <div class="col-xs-6 highestBidLabel">
+                  Highest Bid:<br>
+                  <span style="color:#1DBB9B">{{ auction.bids[(auction.bids.length) - 1].value | currency }}</span>
+                </div>
+                <div class="col-xs-6 highestBidLabel text-right">
+                  <button class="btn btn-sm btn-primary openDetails">Open details</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,18 +1,21 @@
 'use strict';
 
-var app = angular.module('myApp');
+var app = angular.module('auctionApp');
 
-app.service('Users', function($http) {
+app.service('User', function($http, $sessionStorage, $q) {
 
   this.signup = (newUserObj) => {
     return $http.post('./api/users/register', newUserObj);
   }
 
   this.login = (loginDetailsObj) => {
-    return $http.post('./api/users/login', loginDetailsObj);
+    return $http.post('./api/users/login', loginDetailsObj)
+                .then((res) => {
+                  $sessionStorage.currentUser = res.data;
+                });
   }
-  this.logout = (loginDetailsObj) => {
-    return $http.delete('./api/users/logout', loginDetailsObj);
+  this.logout = () => {
+    return $http.delete('./api/users/logout');
   }
 
   this.loadprofile = () => {

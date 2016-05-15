@@ -13,11 +13,13 @@ if(!JWT_SECRET) {
   throw new Error('Missing JWT_SECRET');
 }
 
+var Auction = require('../models/auction');
+
 var userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   isAdmin: { type: Boolean, default: false },
-  auctions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Auctions' }]
+  auctions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Auction' }]
 });
 
 // IT'S MIDDLEWARE!!
@@ -30,11 +32,11 @@ userSchema.statics.isLoggedIn = function(req, res, next) {
     User
       .findById(payload._id)
       .select({password: false})
+      .populate('auctions')
       .exec((err, user) => {
         if(err || !user) {
           return res.clearCookie('accessToken').status(400).send(err || {error: 'User not found.'});
         }
-
         req.user = user;
         next();
       })
@@ -65,7 +67,6 @@ userSchema.statics.editProfile = function(userId, newUser, cb) {
 userSchema.statics.authenticate = function(userObj, cb) {
   // find the user by the email
   // confirm the password
-
   // if user is found, and password is good, create a token
   this.findOne({email: userObj.email}, (err, dbUser) => {
     if(err || !dbUser) return cb(err || { error: 'Login failed. Username or password incorrect.' });
@@ -75,7 +76,7 @@ userSchema.statics.authenticate = function(userObj, cb) {
 
       var token = dbUser.makeToken();
 
-      cb(null, token);
+      cb(null, token, dbUser._id);
     })
   });
 };
