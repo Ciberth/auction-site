@@ -1,3 +1,89 @@
 body {
-  color:orange;
+  font-family: 'Raleway', sans-serif;
+  background-color: #EEF3F6;
+}
+
+.topBar {
+  height: 60px;
+  width: 100%;
+  background-color: #EEF3F6;
+}
+
+.noBorPad {
+  border: 0;
+  padding: 0;
+}
+
+.topBarLogo, .topBarLogo:hover, .topBarLogo:focus {
+  line-height: 60px;
+  vertical-align: middle;
+  margin-left: 25px;
+  color:black;
+  text-decoration: none;
+  font-weight: 900;
+  font-size: 150%;
+}
+
+.topBarLink, .topBarLink:hover, .topBarLink:focus {
+  line-height: 60px;
+  vertical-align: middle;
+  margin-left: 25px;
+  text-decoration: none;
+}
+
+.topBarLogo:hover{
+  font-weight: bolder;
+}
+
+.topBarLink:hover{
+  font-weight: bolder;
+  margin-right: -3px;
+}
+
+.topBarButton {
+  margin-top: 15px;
+  border-radius: 3px;
+  background-color: transparent;
+  margin-right: 25px;
+  border: 1px solid grey;
+  padding: 5px 15px;
+  color: #1DBB9B;
+}
+
+.register {
+  background-color: #1DBB9B;
+  border-color: transparent;
+  color:white;
+}
+
+.logIn:hover {
+  background-color: #1DBB9B;
+  border-color: transparent;
+  color:white;
+}
+
+.header {
+  height: 350px;
+  background-color: white;
+}
+
+.homeHeader {
+  vertical-align: middle;
+  line-height: 350px;
+  color:black;
+  margin: 0;
+}
+
+.header>a, .header>a:hover, .header>a:focus {
+  position: relative;
+  top: -150px;
+  color:#1DBB9B;
+}
+
+.finSoon {
+  margin-left: 15px;
+}
+
+.homeLoading {
+  margin-top: 160px;
 }

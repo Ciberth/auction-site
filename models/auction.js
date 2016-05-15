@@ -19,6 +19,7 @@ var auctionSchema = new mongoose.Schema({
   description: { type: String, required: true },
   imgUrl: { type: String, required: true },
   endTime: { type: String, required: true },
+  isFinished: { type: Boolean, default: false, required: true },
   bids: [{
     madeBy: { type: mongoose.Schema.Types.ObjectId, ref: 'Users' },
     value: { type: Number, required: true },
