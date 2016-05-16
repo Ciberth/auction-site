@@ -30,7 +30,7 @@
           <b>Created By:</b> {{ auction.createdBy.email }}
         </div>
         <div class="row profileItem">
-          <b>Ending in: <span style="color:red">{{ auction.endTime - currentDate | date:'H:mm:ss' }}</span></b>
+          <b>Ending: <span style="color:red">{{ toEnd }}</span></b>
         </div>
         <div class="row profileItem" ng-if="auction.isFinished">
           <b>Status:</b> ENDED

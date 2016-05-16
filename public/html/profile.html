@@ -33,7 +33,7 @@
                   <span style="color:#1DBB9B">{{ auction.bids[(auction.bids.length) - 1].value | currency }}</span>
                 </div>
                 <div class="col-xs-6 highestBidLabel text-right">
-                  <button class="btn btn-sm btn-primary openDetails">Open details</button>
+                  <button class="btn btn-sm btn-primary openDetails" ng-click="openAuction(auction._id)">Open details</button>
                 </div>
               </div>
             </div>

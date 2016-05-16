@@ -45,15 +45,20 @@ app.controller('auctionCtrl', function($scope, User, $state, Auction, $statePara
   $scope.auction = {};
   $scope.isMyAuction = false;
   $scope.newBid = {};
-  $scope.currentDate = new Date();
+  $scope.currentDate = moment();
+  $scope.toEnd = null;
   $interval(function() {
-    $scope.currentDate = new Date();
+    $scope.currentDate = moment();
+    if($scope.auction.endTime) {
+      $scope.toEnd = $scope.currentDate.to($scope.auction.endTime);
+    }
   }, 1000);
   Auction.getOne($stateParams.id)
     .then((res) => {
       $scope.auction = res.data
-      $scope.auction.endTime = new Date($scope.auction.endTime);
-      if(res.data.createdBy === $sessionStorage.currentUser)
+      $scope.auction.endTime = moment($scope.auction.endTime);
+      $scope.newBid = {};
+      if(res.data.createdBy._id === $sessionStorage.currentUser)
         $scope.isMyAuction = true;
     })
   $scope.addBid = () => {
@@ -64,8 +69,8 @@ app.controller('auctionCtrl', function($scope, User, $state, Auction, $statePara
         Auction.getOne($stateParams.id)
           .then((res) => {
             $scope.auction = res.data
+            $scope.auction.endTime = moment($scope.auction.endTime);
             $scope.newBid = {};
-            $scope.auction.endTime = new Date($scope.auction.endTime);
             if(res.data.createdBy === $sessionStorage.currentUser)
               $scope.isMyAuction = true;
           })
@@ -75,10 +80,6 @@ app.controller('auctionCtrl', function($scope, User, $state, Auction, $statePara
 
 app.controller('auctionsCtrl', function($scope, User, $state, Auction, $interval) {
   console.log('auctionsCtrl');
-  $scope.currentDate = new Date();
-  $interval(function() {
-    $scope.currentDate = new Date();
-  }, 1000);
   $scope.openAuction = (auctionId) => {
     $state.go('auction', {id: auctionId});
   }
@@ -86,9 +87,6 @@ app.controller('auctionsCtrl', function($scope, User, $state, Auction, $interval
   Auction.getAll()
     .then((res) => {
       $scope.auctions = res.data;
-      $scope.auctions = $scope.auctions.map((auction) => {
-        auction.endTime = new Date(auction.endTime);
-      })
     })
   $scope.newAuction = () => {
     $state.go('newAuction');
@@ -129,6 +127,9 @@ app.controller('loginCtrl', function($scope, User, $state, $sessionStorage) {
 app.controller('profileCtrl', function($scope, User, $state, $sessionStorage, $stateParams) {
   console.log('profileCtrl');
   $scope.profile = {};
+  $scope.openAuction = (auctionId) => {
+    $state.go('auction', {id: auctionId});
+  }
   User.loadprofile()
     .then((res) => {
       $scope.profile = res.data;
