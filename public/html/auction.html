@@ -29,8 +29,11 @@
         <div class="row profileItem">
           <b>Created By:</b> {{ auction.createdBy.email }}
         </div>
-        <div class="row profileItem">
+        <div class="row profileItem" ng-if="!auction.isFinished">
           <b>Ending: <span style="color:red">{{ toEnd }}</span></b>
+        </div>
+        <div class="row profileItem" ng-if="auction.isFinished">
+          <b>Ended: <span style="color:red">{{ toEnd }}</span></b>
         </div>
         <div class="row profileItem" ng-if="auction.isFinished">
           <b>Status:</b> ENDED
@@ -43,6 +46,9 @@
           <div class="row">
             <img ng-src="{{auction.imgUrl}}" alt="" class="auctionImg">
           </div>
+        </div>
+        <div class="row profileItem" ng-if="auction.isFinished">
+          <span style="color:green"><b>Winner bid: {{auction.bids[auction.bids.length -1].value | currency}}</b></span>
         </div>
         <div class="row profileItem" ng-if="!auction.isFinished">
             <b>Bids:</b>

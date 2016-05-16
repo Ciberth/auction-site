@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
 var moment = require('moment');
 var bcrypt = require('bcryptjs');
-
+var CronJob = require('cron').CronJob;
 require('dotenv').config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -14,6 +14,7 @@ if(!JWT_SECRET) {
 }
 
 var User = require('../models/user');
+var Email = require('../models/email');
 
 var auctionSchema = new mongoose.Schema({
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
@@ -37,17 +38,23 @@ auctionSchema.statics.createNew = (auctionObj, user, cb) => {
     title: auctionObj.title,
     description: auctionObj.description,
     imgUrl: auctionObj.imgUrl,
-    endTime: auctionObj.endTime,
+    endTime: new Date(auctionObj.endTime),
     bids: [{
       madeBy: user._id,
       value: auctionObj.initialPrice,
-      date: moment()
+      date: new Date()
     }]
   });
   console.log('auction', auction);
   auction.save((err, dbAuction) => {
-    console.log('dbAuction', dbAuction);
-    console.log('err', err);
+    var job = new CronJob(new Date(auctionObj.endTime), function() {
+        dbAuction.finish();
+      }, function () {
+        console.log('Finished auction: ', dbAuction._id);
+      },
+      true, /* Start the job right now */
+      'America/Los_Angeles'
+    );
     user.addAuction(dbAuction._id, cb(err));
   });
 }
@@ -93,6 +100,13 @@ auctionSchema.methods.removeBid = function (bidId, userId, cb) {
     return bid._id.toString() !== bidId.toString();
   })
   this.save(cb);
+}
+
+auctionSchema.methods.finish = function () {
+  this.isFinished = true;
+  Email.sendEndedConfirmation("szucs.norbert@outlook.com");
+  Email.sendWinConfirmation("szucs.norbert@outlook.com");
+  this.save();
 }
 
 var Auction = mongoose.model('Auction', auctionSchema);

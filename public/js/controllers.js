@@ -21,8 +21,18 @@ app.controller('mainCtrl', function($scope, User, $state, $sessionStorage) {
   }
 });
 
-app.controller('homeCtrl', function($scope, User, $state) {
+app.controller('homeCtrl', function($scope, User, $state, Auction) {
   console.log('homeCtrl');
+  $scope.auctions = {};
+  $scope.loading = true;
+  Auction.getAll()
+    .then((res) => {
+      $scope.auctions = res.data;
+      $scope.loading = false;
+    });
+  $scope.goToLogIn = () => {
+    $state.go('login');
+  }
 });
 
 app.controller('newAuctionCtrl', function($scope, User, Auction, $state, $timeout) {

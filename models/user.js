@@ -7,6 +7,7 @@ var bcrypt = require('bcryptjs');
 
 require('dotenv').config();
 
+
 const JWT_SECRET = process.env.JWT_SECRET;
 
 if(!JWT_SECRET) {
@@ -14,6 +15,7 @@ if(!JWT_SECRET) {
 }
 
 var Auction = require('../models/auction');
+var Email = require('../models/email');
 
 var userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
@@ -53,9 +55,13 @@ userSchema.statics.register = function(userObj, cb) {
       var user = new User({
         email: userObj.email,
         password: hash
+      });
+      
+      user.save((err) => {
+        if(err) cb(err)
+        Email.sendConfirmation(userObj.email, userObj.password);
+        cb(null);
       })
-
-      user.save(cb)
     })
   })
 };

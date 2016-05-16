@@ -8,7 +8,8 @@ var Auction = require('../models/auction');
 var User = require('../models/user');
 
 router.get('/', (req, res) => {
-  Auction.find({}, (err, auctions) => {
+  Auction.find({isFinished: false})
+    .exec((err, auctions) => {
     return err ? res.status(400).send(err) : res.send(auctions);
   });
 });
