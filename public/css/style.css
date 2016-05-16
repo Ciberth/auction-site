@@ -163,3 +163,7 @@ body {
 .newAuction {
   margin-top: 10px;
 }
+
+.addMarginToImg {
+  margin-left: 25px;
+}
