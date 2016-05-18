@@ -117,8 +117,8 @@ body {
 }
 
 .auctionImg {
-  min-width:200px;
-  min-height: 150px;
+  width:200px;
+  height: 150px;
   position: relative;
   left: -10px;
 }
